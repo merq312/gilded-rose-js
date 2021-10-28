@@ -16,5 +16,8 @@
   "private": true,
   "devDependencies": {
     "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "@types/jest": "^27.0.2"
   }
 }
