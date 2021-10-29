@@ -6,62 +6,65 @@ class Item {
   }
 }
 
+// IDEA: Build and chain prototypes of each Item "type"
+
 class Shop {
   constructor(items = []) {
     this.items = items
   }
+
   updateQuality() {
-    this.items.forEach(item => {
-      if (
-        item.name !== "Aged Brie" &&
-        item.name !== "Backstage passes to a TAFKAL80ETC concert"
-      ) {
-        if (item.quality > 0) {
-          if (item.name !== "Sulfuras, Hand of Ragnaros") {
-            item.quality = item.quality - 1
-          }
-        }
+    const isAgedBrie = (item) => {
+      if (item.sellIn <= 0) {
+        item.quality += 2
       } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1
-          if (
-            item.name === "Backstage passes to a TAFKAL80ETC concert"
-          ) {
-            if (item.sellIn < 11) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1
-              }
-            }
-            if (item.sellIn < 6) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1
-              }
-            }
-          }
-        }
+        item.quality += 1
       }
-      if (item.name !== "Sulfuras, Hand of Ragnaros") {
-        item.sellIn = item.sellIn - 1
+
+      if (item.quality > 50) {
+        item.quality = 50
       }
-      if (item.sellIn < 0) {
-        if (item.name !== "Aged Brie") {
-          if (
-            item.name !== "Backstage passes to a TAFKAL80ETC concert"
-          ) {
-            if (item.quality > 0) {
-              if (item.name !== "Sulfuras, Hand of Ragnaros") {
-                item.quality = item.quality - 1
-              }
-            }
-          } else {
-            item.quality =
-              item.quality - item.quality
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1
-          }
-        }
+
+      item.sellIn -= 1
+    }
+
+    const isBackstagePass = (item) => {
+      if (item.sellIn > 10) {
+        item.quality += 1
+      } else if (item.sellIn > 5) {
+        item.quality += 2
+      } else if (item.sellIn > 0) {
+        item.quality += 3
+      } else {
+        item.quality = 0
+      }
+
+      item.sellIn -= 1
+    }
+
+    const isGenericItem = (item) => {
+      if (item.sellIn > 0) {
+        item.quality -= 1
+      } else {
+        item.quality -= 2
+      }
+
+      if (item.quality < 0) {
+        item.quality = 0
+      }
+
+      item.sellIn -= 1
+    }
+
+    this.items.forEach(item => {
+      if (item.name === "Aged Brie") {
+        isAgedBrie(item)
+      } else if (item.name === "Backstage passes to a TAFKAL80ETC concert") {
+        isBackstagePass(item)
+      } else if (item.name === "Sulfuras, Hand of Ragnaros") {
+        // Do nothing
+      } else {
+        isGenericItem(item)
       }
     })
 
