@@ -1,7 +1,7 @@
 const { Shop, Item } = require("../src/gilded_rose")
 
-describe("Assert all item properties exist", function () {
-  it("Has sellIn value", function () {
+describe("Assert all item properties exist", () => {
+  it("Has sellIn value", () => {
     const gildedRose = new Shop([
       new Item("malk", 0, 0),
       new Item("eggs", 1, 2),
@@ -13,7 +13,7 @@ describe("Assert all item properties exist", function () {
     })
   })
 
-  it("Has quality value", function () {
+  it("Has quality value", () => {
     const gildedRose = new Shop([
       new Item("malk", 0, 0),
       new Item("eggs", 1, 2),
@@ -25,7 +25,7 @@ describe("Assert all item properties exist", function () {
     })
   })
 
-  it("Has a name", function () {
+  it("Has a name", () => {
     const gildedRose = new Shop([
       new Item("malk", 0, 0),
       new Item("eggs", 1, 2),
@@ -38,8 +38,8 @@ describe("Assert all item properties exist", function () {
   })
 })
 
-describe("quality and sellAt tests for generic items", function () {
-  it("quality degrades by 1 after one day", function () {
+describe("quality and sellAt tests for generic items", () => {
+  it("quality degrades by 1 after one day", () => {
     const quality = 20
     const sellIn = 10
     const gildedRose = new Shop([new Item("potions", sellIn, quality)])
@@ -49,7 +49,7 @@ describe("quality and sellAt tests for generic items", function () {
     expect(items[0].quality).toBe(quality - 1)
   })
 
-  it("sellAt decreases by 1 after one day", function () {
+  it("sellAt decreases by 1 after one day", () => {
     const quality = 20
     const sellIn = 10
     const gildedRose = new Shop([new Item("potions", sellIn, quality)])
@@ -59,7 +59,7 @@ describe("quality and sellAt tests for generic items", function () {
     expect(items[0].sellIn).toBe(sellIn - 1)
   })
 
-  it("quality degrades twice as fast after sellIn date", function () {
+  it("quality degrades twice as fast after sellIn date", () => {
     const quality = 20
     const sellIn = 0
     const gildedRose = new Shop([new Item("potions", sellIn, quality)])
@@ -69,7 +69,7 @@ describe("quality and sellAt tests for generic items", function () {
     expect(items[0].quality).toBe(quality - 2)
   })
 
-  it("quality is never negative", function () {
+  it("quality is never negative", () => {
     const quality = 0
     const sellIn = 10
     const gildedRose = new Shop([new Item("potions", sellIn, quality)])
@@ -79,19 +79,19 @@ describe("quality and sellAt tests for generic items", function () {
     expect(items[0].quality).toBe(0)
   })
 
-  it("Negative sellIn is valid", function () {
+  it("Negative sellIn is valid", () => {
     const quality = 15
     const sellIn = -10
     const gildedRose = new Shop([new Item("potions", sellIn, quality)])
 
     const items = gildedRose.updateQuality()
 
-    expect(items[0].quality).toBe(13)
+    expect(items[0].quality).toBe(quality - 2)
   })
 })
 
-describe("quality tests for Aged Brie", function () {
-  it("quality increases by 1 after one day before sellIn", function () {
+describe("quality tests for Aged Brie", () => {
+  it("quality increases by 1 after one day before sellIn", () => {
     const quality = 20
     const sellIn = 10
     const gildedRose = new Shop([new Item("Aged Brie", sellIn, quality)])
@@ -101,7 +101,7 @@ describe("quality tests for Aged Brie", function () {
     expect(items[0].quality).toBe(quality + 1)
   })
 
-  it("quality increases by 2 after one day after sellIn", function () {
+  it("quality increases by 2 after one day after sellIn", () => {
     const quality = 20
     const sellIn = 0
     const gildedRose = new Shop([new Item("Aged Brie", sellIn, quality)])
@@ -111,7 +111,7 @@ describe("quality tests for Aged Brie", function () {
     expect(items[0].quality).toBe(quality + 2)
   })
 
-  it("quality does not increase over 50", function () {
+  it("quality does not increase over 50", () => {
     const quality = 50
     const sellIn = 10
     const gildedRose = new Shop([new Item("Aged Brie", sellIn, quality)])
@@ -121,7 +121,7 @@ describe("quality tests for Aged Brie", function () {
     expect(items[0].quality).toBe(50)
   })
 
-  it("quality limited to 50 even if incremented by 2 from 49", function () {
+  it("quality limited to 50 even if incremented by 2 from 49", () => {
     const quality = 49
     const sellIn = -2
     const gildedRose = new Shop([new Item("Aged Brie", sellIn, quality)])
@@ -132,9 +132,80 @@ describe("quality tests for Aged Brie", function () {
   })
 })
 
-describe("quality and sellAt tests for Sulfuras", function () {})
+describe("quality and sellIn tests for Sulfuras", () => {
+  it("quality is static", () => {
+    const quality = 80
+    const sellIn = 10
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
 
-describe("quality and sellAt tests for Backstage passes", function () {})
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].quality).toBe(quality)
+  })
+
+  it("sellIn is static", () => {
+    const quality = 80
+    const sellIn = 10
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].sellIn).toBe(sellIn)
+  })
+
+  it("sellIn is static:negative value", () => {
+    const quality = 80
+    const sellIn = -3
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].sellIn).toBe(sellIn)
+  })
+
+})
+
+describe("quality tests for Backstage passes", () => {
+  it("quality static if more than 10 days left", () => {
+    const quality = 20
+    const sellIn = 13
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].quality).toBe(quality)
+  })
+
+  it("quality increases by 2 if between 10 and 5 days left", () => {
+    const quality = 20
+    const sellIn = 8
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].quality).toBe(quality + 2)
+  })
+
+  it("quality increases by 3 if less than 5 days left", () => {
+    const quality = 20
+    const sellIn = 3
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].quality).toBe(quality + 3)
+  })
+
+  it("quality reduced to 0 after sellIn date", () => {
+    const quality = 20
+    const sellIn = 0
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+
+    const items = gildedRose.updateQuality()
+
+    expect(items[0].quality).toBe(0)
+  })
+})
 
 /*
 DO NOT alter the Item class or the Item properties!
