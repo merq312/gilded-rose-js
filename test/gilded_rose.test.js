@@ -146,7 +146,9 @@ describe("quality and sellIn tests for Sulfuras", () => {
   it("quality is static", () => {
     const quality = 80
     const sellIn = 10
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Sulfuras, Hand of Ragnaros", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
@@ -156,7 +158,9 @@ describe("quality and sellIn tests for Sulfuras", () => {
   it("sellIn is static", () => {
     const quality = 80
     const sellIn = 10
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Sulfuras, Hand of Ragnaros", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
@@ -166,20 +170,23 @@ describe("quality and sellIn tests for Sulfuras", () => {
   it("sellIn is static:negative value", () => {
     const quality = 80
     const sellIn = -3
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Sulfuras, Hand of Ragnaros", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
     expect(items[0].sellIn).toBe(sellIn)
   })
-
 })
 
 describe("quality tests for Backstage passes", () => {
   it("quality increases by 1 if more than 10 days left", () => {
     const quality = 20
     const sellIn = 13
-    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
@@ -189,7 +196,9 @@ describe("quality tests for Backstage passes", () => {
   it("quality increases by 2 if between 10 and 5 days left", () => {
     const quality = 20
     const sellIn = 8
-    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
@@ -199,7 +208,9 @@ describe("quality tests for Backstage passes", () => {
   it("quality increases by 3 if less than 5 days left", () => {
     const quality = 20
     const sellIn = 3
-    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
@@ -209,7 +220,9 @@ describe("quality tests for Backstage passes", () => {
   it("quality reduced to 0 after sellIn date", () => {
     const quality = 20
     const sellIn = 0
-    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality)])
+    const gildedRose = new Shop([
+      new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality),
+    ])
 
     const items = gildedRose.updateQuality()
 
