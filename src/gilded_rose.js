@@ -6,67 +6,72 @@ class Item {
   }
 }
 
-// IDEA: Build and chain prototypes of each Item "type"
+const AgedBrie = {
+  updateQuality() {
+    if (this.sellIn <= 0) {
+        this.quality += 2
+      } else {
+        this.quality += 1
+      }
+
+      if (this.quality > 50) {
+        this.quality = 50
+      }
+
+      this.sellIn -= 1
+    }
+}
+
+const BackstagePass = {
+  updateQuality() {
+      if (this.sellIn > 10) {
+        this.quality += 1
+      } else if (this.sellIn > 5) {
+        this.quality += 2
+      } else if (this.sellIn > 0) {
+        this.quality += 3
+      } else {
+        this.quality = 0
+      }
+
+      this.sellIn -= 1
+  }
+}
+
+const Sulfuras = {
+  updateQuality() {}
+}
+
+const GenericItem = {
+      updateQuality() {
+        if (this.sellIn > 0) {
+          this.quality -= 1
+        } else {
+          this.quality -= 2
+        }
+
+        if (this.quality < 0) {
+          this.quality = 0
+        }
+
+        this.sellIn -= 1
+  }
+}
 
 class Shop {
   constructor(items = []) {
-    this.items = items
+    this.items = items.map(item => {
+      switch(item.name) {
+        case "Aged Brie": return Object.assign(AgedBrie, item)
+        case "Backstage passes to a TAFKAL80ETC concert": return Object.assign(BackstagePass, item)
+        case "Sulfuras, Hand of Ragnaros": return Object.assign(Sulfuras, item)
+        default: return Object.assign(GenericItem, item)
+      }
+    })
   }
 
   updateQuality() {
-    const isAgedBrie = (item) => {
-      if (item.sellIn <= 0) {
-        item.quality += 2
-      } else {
-        item.quality += 1
-      }
-
-      if (item.quality > 50) {
-        item.quality = 50
-      }
-
-      item.sellIn -= 1
-    }
-
-    const isBackstagePass = (item) => {
-      if (item.sellIn > 10) {
-        item.quality += 1
-      } else if (item.sellIn > 5) {
-        item.quality += 2
-      } else if (item.sellIn > 0) {
-        item.quality += 3
-      } else {
-        item.quality = 0
-      }
-
-      item.sellIn -= 1
-    }
-
-    const isGenericItem = (item) => {
-      if (item.sellIn > 0) {
-        item.quality -= 1
-      } else {
-        item.quality -= 2
-      }
-
-      if (item.quality < 0) {
-        item.quality = 0
-      }
-
-      item.sellIn -= 1
-    }
-
-    this.items.forEach(item => {
-      if (item.name === "Aged Brie") {
-        isAgedBrie(item)
-      } else if (item.name === "Backstage passes to a TAFKAL80ETC concert") {
-        isBackstagePass(item)
-      } else if (item.name === "Sulfuras, Hand of Ragnaros") {
-        // Do nothing
-      } else {
-        isGenericItem(item)
-      }
-    })
+    this.items.forEach(item => item.updateQuality())
 
     return this.items
   }
